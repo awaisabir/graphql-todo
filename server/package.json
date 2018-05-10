@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon --exec babel-node index.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
@@ -16,6 +19,10 @@
     "sequelize": "^4.37.7"
   },
   "devDependencies": {
-    "graphiql": "^0.11.11"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "graphiql": "^0.11.11",
+    "nodemon": "^1.17.4"
   }
 }

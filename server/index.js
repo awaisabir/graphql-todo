@@ -10,7 +10,7 @@ if (!result.error) {
     const PORT = process.env.PORT || 4200;
     const APP  = express();
 
-    APP.listen(POST, err => {
+    APP.listen(PORT, err => {
         if (err) throw err;
 
         console.log(`App listening on port ${PORT}`);
