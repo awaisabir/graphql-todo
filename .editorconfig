@@ -1,0 +1,4 @@
+[*.{js,json,css,html}]
+indent_size = 2
+indent_style = unset
+tab_width = 2
