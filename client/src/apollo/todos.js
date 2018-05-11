@@ -9,7 +9,7 @@ export const fetchTodos = async () => (
           todos {
             id
             title
-            text
+            description
             completed
           }
         }
