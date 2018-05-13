@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // apollo
 import { ApolloProvider } from 'react-apollo';
@@ -11,7 +12,11 @@ import registerServiceWorker from './registerServiceWorker';
 
 const Bootstrap = () => (
   <ApolloProvider client={client}>
-    <App />
+    <MuiThemeProvider>
+      <div className='container'>
+        <App />
+      </div>
+    </MuiThemeProvider>
   </ApolloProvider>
 );
 
