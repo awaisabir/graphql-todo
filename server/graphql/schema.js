@@ -15,10 +15,10 @@ const typeDefs = `
   }
 
   type Query {
-    todo(id: String!): Todo!
+    todo(id: Int!): Todo!
     completedTodos: [Todos!]!
     activeTodos: [Todos!]!
-    deleteTodo(id: String!) : Todo!
+    deleteTodo(id: Int!) : Todo!
 
     user($userId: Int!) {
       user(id: $userId) {
