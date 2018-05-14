@@ -13,9 +13,7 @@ import registerServiceWorker from './registerServiceWorker';
 const Bootstrap = () => (
   <ApolloProvider client={client}>
     <MuiThemeProvider>
-      <div className='container'>
         <App />
-      </div>
     </MuiThemeProvider>
   </ApolloProvider>
 );

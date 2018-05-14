@@ -1,37 +1,43 @@
 import React, { Component } from 'react';
 
-import CircularProgress from 'material-ui/CircularProgress';
+import { BrowserRouter as Router, Route  } from 'react-router-dom';
 
-import '../styles/App.css';
-import User from '../components/User';
-
-import { graphql } from 'react-apollo';
-import { fetchUserById } from '../apollo/users';
+import RouterRoot from '../components/routing/RouterRoot';
+import NavBar from '../components/Navbar';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isLoggedIn: false,
+    };
+
+    this.onLogout = this.onLogout.bind(this);
+  }
+
+  onLogout() {
+    const { isLoggedIn } = this.state;
+
+    if (isLoggedIn)
+      this.setState({isLoggedIn: false});
+    else
+      this.setState({isLoggedIn: true});
+  }
+
   render() {
-    const { data } = this.props;
-
-    if (data.loading)
-      return <CircularProgress size={80} thickness={5} />;
-
-    if (data.error)
-      return (
-        <div style={{textAlign: 'center', marginTop: '100px'}}>
-          {data.error.message}
-        </div>
-      );
-
     return (
-      <User style={{marginTop: '50px'}} username={data.username} />
+      <Router>
+        <div>
+          <NavBar isLoggedIn={this.state.isLoggedIn} onLogout={this.onLogout}/>
+          <div className='container'>
+            <div>
+              <Route path='/' render={() => <RouterRoot isLoggedIn={this.state.isLoggedIn} />} />
+            </div>
+          </div>
+        </div>
+      </Router>
     );
   }
-}
+};
 
-export default graphql(fetchUserById, {
-  options: props => ({
-    variables: {
-      id: 1
-    }
-  })
-})(App);
+export default App;
