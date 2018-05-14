@@ -3,10 +3,11 @@ export default (sequelize, DataTypes) => {
         username: {
             type: DataTypes.TEXT,
             unique: true,
+            allowNull: false,
         },
         password: {
             type: DataTypes.TEXT,
-            allowNull: false
+            allowNull: false,
         }
     });
 

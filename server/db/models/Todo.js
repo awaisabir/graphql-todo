@@ -1,10 +1,17 @@
 export default (sequelize, DataTypes) => {
     const Todo = sequelize.define('todo', {
-        title: DataTypes.TEXT,
-        description: DataTypes.ARRAY(DataTypes.TEXT),  
+        title: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+        },
+        description: {
+          type: DataTypes.ARRAY(DataTypes.TEXT),
+          allowNull: false,
+        },
         completed: {
             type: DataTypes.BOOLEAN,
             default: false,
+            allowNull: false,
         }
     });
 
