@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+
 import { Card, CardTitle } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import CircularProgress from 'material-ui/CircularProgress';
+
+import { graphql, compose } from 'react-apollo';
+import { login } from '../apollo/auth';
 
 class Login extends Component {
   constructor(props) {
@@ -9,23 +14,55 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
+      loading: false,
+      message: '',
+      success: false,
+      error: {},
     };
 
-    this.onFormSubmit = this.onFormSubmit.bind(this);
+    this._onFormSubmit = this._onFormSubmit.bind(this);
   };
 
-  onFormSubmit(e) {
+  async _onFormSubmit(e) {
     e.preventDefault();
     const { username, password } = this.state;
 
-    console.log(username, password);
+    this.setState({loading: true});
+
+    try {
+      const result = await this.props.loginMutation({
+        variables: {
+          username,
+          password,
+        }
+      });
+      
+    } catch (error) { this.setState({loading: false, error}); }
+
+    this.setState({loading: false,});
+
   }
 
   render() {
-    const { username, password } = this.state;
-
+    const { username, password, loading, error } = this.state;
     return (
       <div style={{marginTop: '50px',}}>
+        {
+          loading ?
+          <div style={{marginBottom: '50px', textAlign: 'center'}}>
+            <CircularProgress 
+              size={80} 
+              thickness={5} 
+            />
+          </div> : null
+        }
+        {
+          error ?
+          <div style={{marginBottom: '50px', textAlign: 'center'}}>
+            <h2>{error.message}</h2>
+          </div> : null
+        }
+
         <Card style={{textAlign: 'center'}}>
           <CardTitle title='Login' />
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -49,7 +86,7 @@ class Login extends Component {
                 style={{marginBottom: '25px', marginTop: '25px'}}
                 label='Login' 
                 primary={true} 
-                onClick={e => this.onFormSubmit(e)}
+                onClick={e => this._onFormSubmit(e)}
               />
             </div>
         </Card>
@@ -58,4 +95,6 @@ class Login extends Component {
   }
 };
 
-export default Login;
+export default compose(
+  graphql(login, {name: 'loginMutation'})
+)(Login);
