@@ -34,20 +34,19 @@ const typeDefs = `
     }
 
     type Mutations {
-      addTodo($userId: Int!, $heading: String!, $description: [String!]!, $completed: Boolean!) : Todo
-      deleteTodo($id: Int!) : Todo
+      addTodo(userId: Int!, heading: String!, description: [String!]!, completed: Boolean!) : Todo
+      deleteTodo(id: Int!) : Todo
 
-      register($username: String!, $password: String!) : {
+      register(username: String!, password: String!) : {
         success
         message
       }
-      login($username: String!, $password: String!) : {
+      login(username: String!, password: String!) : {
         success
         message
         token
       }
-      deleteUser($id: Int!) : User
+      deleteUser(id: Int!) : User
     }
-
   }
 `;
