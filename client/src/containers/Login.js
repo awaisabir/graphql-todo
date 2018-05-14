@@ -42,10 +42,7 @@ class Login extends Component {
       onLogin(token);
       history.push('/profile');
     } catch (error) { 
-      // this.setState({loading: false, error});
-      this.setState({loading: false});
-      onLogin('qqwreUIQFUFwejfnw');
-      history.push('/profile');
+      this.setState({loading: false, error});
     }
   }
 
