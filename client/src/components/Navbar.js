@@ -16,7 +16,7 @@ const Logged = (props) => (
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   > 
     {
-      props.loggedIn ?
+      props.isLoggedIn ?
         <span>
           <NavLink to='/profile'><MenuItem primaryText='Profile' /></NavLink>
           <MenuItem primaryText='Sign out' onClick={() => props.onLogout()}/>
@@ -32,7 +32,7 @@ const Logged = (props) => (
 Logged.muiName = 'IconMenu';
 
 export default (props) => {
-  const { onLogout, loggedIn } = props;
+  const { onLogout, isLoggedIn } = props;
   return (
     <div>
         <div>
@@ -40,7 +40,7 @@ export default (props) => {
             showMenuIconButton={false}
             title='Todo'
             iconElementRight={
-              <Logged loggedIn={loggedIn} onLogout={onLogout}/>
+              <Logged isLoggedIn={isLoggedIn} onLogout={onLogout}/>
             }
           /> 
         </div>

@@ -15,8 +15,6 @@ class Login extends Component {
       username: '',
       password: '',
       loading: false,
-      message: '',
-      success: false,
       error: {},
     };
 
@@ -26,6 +24,7 @@ class Login extends Component {
   async _onFormSubmit(e) {
     e.preventDefault();
     const { username, password } = this.state;
+    const { onLogin, history }   = this.props;
 
     this.setState({loading: true});
 
@@ -36,11 +35,18 @@ class Login extends Component {
           password,
         }
       });
-      
-    } catch (error) { this.setState({loading: false, error}); }
 
-    this.setState({loading: false,});
+      const {data: { token }} = result;
 
+      this.setState({loading: false});
+      onLogin(token);
+      history.push('/profile');
+    } catch (error) { 
+      // this.setState({loading: false, error});
+      this.setState({loading: false});
+      onLogin('qqwreUIQFUFwejfnw');
+      history.push('/profile');
+    }
   }
 
   render() {

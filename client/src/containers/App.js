@@ -10,18 +10,19 @@ class App extends Component {
     super();
     this.state = {
       isLoggedIn: false,
+      token: '',
     };
 
     this.onLogout = this.onLogout.bind(this);
+    this.onLogin  = this.onLogin.bind(this);
   }
 
   onLogout() {
-    const { isLoggedIn } = this.state;
+    this.setState({isLoggedIn: false, token: ''});
+  }
 
-    if (isLoggedIn)
-      this.setState({isLoggedIn: false});
-    else
-      this.setState({isLoggedIn: true});
+  onLogin(token) {
+    this.setState({token, isLoggedIn: true});
   }
 
   render() {
@@ -31,7 +32,10 @@ class App extends Component {
           <NavBar isLoggedIn={this.state.isLoggedIn} onLogout={this.onLogout}/>
           <div className='container'>
             <div>
-              <Route path='/' render={() => <RouterRoot isLoggedIn={this.state.isLoggedIn} />} />
+              <Route path='/' render={() => <RouterRoot 
+                isLoggedIn={this.state.isLoggedIn} 
+                onLogin={this.onLogin}
+              />} />
             </div>
           </div>
         </div>
