@@ -4,6 +4,7 @@ import { Card, CardTitle } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
+import Snackbar from 'material-ui/Snackbar';
 
 import { compose, graphql } from 'react-apollo';
 import { register } from '../apollo/auth';
@@ -18,9 +19,15 @@ class Register extends Component {
       message: '',
       success: false,
       error: {},
+      autoHideDuration: 4000,
+      open: false,
     };
 
-    this._onFormSubmit = this._onFormSubmit.bind(this);
+    this._onFormSubmit        = this._onFormSubmit.bind(this);
+    this.handleClick          = this.handleClick.bind(this);
+    this.handleActionClick    = this.handleActionClick.bind(this);
+    this.handleChangeDuration = this.handleChangeDuration.bind(this);
+    this.handleRequestClose   = this.handleRequestClose.bind(this);
   };
 
   async _onFormSubmit(e) {
@@ -31,24 +38,52 @@ class Register extends Component {
 
     try {
       const result = await this.props.registerMutation({
-        variables: {
+      variables: {
           username,
           password,
         }
       });
       
-    } catch (error) { this.setState({loading: false, error}); }
+      const { message, success } = result.data.register;
 
-    this.setState({loading: false,});
+      this.setState({loading: false, message, success}, () => {
+        this.handleClick();
+      });
+    } catch (error) { this.setState({loading: false, error}, () => { this.handleClick(); }); }
   }
 
+  handleClick() {
+    this.setState({
+      open: true,
+    });
+  };
+
+  handleActionClick() {
+    this.setState({
+      open: false,
+    });
+    alert('Event removed from your calendar.');
+  };
+
+  handleChangeDuration(e) {
+    const value = e.target.value;
+    this.setState({
+      autoHideDuration: value.length > 0 ? parseInt(value) : 0,
+    });
+  };
+
+  handleRequestClose() {
+    this.setState({
+      open: false,
+    });
+  };
+
   render() {
-    const { username, password, loading, error } = this.state;
+    const { username, password, loading, error, message, success } = this.state;
 
     return (
       <div style={{marginTop: '50px',}}>
-      {
-        loading ?
+        { loading ?
           <div style={{marginBottom: '50px', textAlign: 'center'}}>
             <CircularProgress 
               size={80} 
@@ -56,11 +91,27 @@ class Register extends Component {
             />
           </div> : null
         }
-        {
-          error ?
-          <div style={{marginBottom: '50px', textAlign: 'center'}}>
-            <h2>{error.message}</h2>
-          </div> : null
+
+        { error.message ?
+          <Snackbar
+            open={this.state.open}
+            message={error.message}
+            action="undo"
+            autoHideDuration={this.state.autoHideDuration}
+            onActionClick={this.handleActionClick}
+            onRequestClose={this.handleRequestClose}
+          /> : null
+        }
+
+        { success ? 
+          <Snackbar
+            open={this.state.open}
+            message={message}
+            action="undo"
+            autoHideDuration={this.state.autoHideDuration}
+            onActionClick={this.handleActionClick}
+            onRequestClose={this.handleRequestClose}
+          /> : null
         }
 
         <Card style={{textAlign: 'center'}}>
