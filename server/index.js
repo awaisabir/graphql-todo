@@ -14,9 +14,10 @@ import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 
 
 if (!result.error) {
-    const models = require('./db').default;
-
-    const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schema')));
+  
+  const models = require('./db').default;
+  
+  const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schema')));
     const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
 
     const schema = makeExecutableSchema({
@@ -26,6 +27,8 @@ if (!result.error) {
     
     const PORT = process.env.PORT || 4200;
     const app  = express();
+    
+    app.use(cors());
 
     const graphqlEndpoint = '/graphql';
 
@@ -37,8 +40,6 @@ if (!result.error) {
     }));
 
     app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndpoint }));
-
-    app.use(cors());
 
     (async () => {
         await models.sequelize.sync();
