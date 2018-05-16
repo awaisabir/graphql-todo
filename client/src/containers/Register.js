@@ -49,7 +49,12 @@ class Register extends Component {
       this.setState({loading: false, message, success}, () => {
         this.handleClick();
       });
-    } catch (error) { this.setState({loading: false, error}, () => { this.handleClick(); }); }
+    } catch (error) {
+      const errorMessage = JSON.parse(error.graphQLErrors[0].message).message;
+      this.setState({loading: false, error: {message: errorMessage}}, () => { 
+        this.handleClick(); 
+      }); 
+    }
   }
 
   handleClick() {
@@ -96,7 +101,6 @@ class Register extends Component {
           <Snackbar
             open={this.state.open}
             message={error.message}
-            action="undo"
             autoHideDuration={this.state.autoHideDuration}
             onActionClick={this.handleActionClick}
             onRequestClose={this.handleRequestClose}
@@ -107,7 +111,6 @@ class Register extends Component {
           <Snackbar
             open={this.state.open}
             message={message}
-            action="undo"
             autoHideDuration={this.state.autoHideDuration}
             onActionClick={this.handleActionClick}
             onRequestClose={this.handleRequestClose}
@@ -120,7 +123,7 @@ class Register extends Component {
               <TextField
                 type='text'
                 value={username}
-                onChange={e => this.setState({username: e.target.value})}
+                onChange={e => this.setState({username: e.target.value, error: {}})}
                 floatingLabelText='Username'
               />
             </div>
@@ -128,7 +131,7 @@ class Register extends Component {
               <TextField
                 type='Password'
                 value={password}
-                onChange={e => this.setState({password: e.target.value})}
+                onChange={e => this.setState({password: e.target.value, error: {}})}
                 floatingLabelText='Password'
               />
             </div>
