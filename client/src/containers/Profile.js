@@ -23,11 +23,11 @@ const Profile = ({data: {loading, error, getUser} }) => {
     );
 
   if (getUser) {
-    const { username } = getUser;
+    const { username, todos } = getUser;
     return (
       <span>
         <User style={{marginTop: '50px'}} username={username} />
-        <Todos />
+        <Todos todos={todos}/>
       </span>
     );
   }
@@ -37,6 +37,11 @@ const Profile = ({data: {loading, error, getUser} }) => {
 
 export default graphql(getUser, {
   options: props => ({
+    context: {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    },
     variables: {
       id: decode(localStorage.getItem('token')).id
     }
