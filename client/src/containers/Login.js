@@ -69,7 +69,6 @@ class Login extends Component {
     this.setState({
       open: false,
     });
-    alert('Event removed from your calendar.');
   };
 
   handleChangeDuration(e) {
