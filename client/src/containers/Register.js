@@ -34,7 +34,7 @@ class Register extends Component {
     e.preventDefault();
     const { username, password } = this.state;
 
-    this.setState({loading: true});
+    this.setState({loading: true, username: '', password: ''});
 
     try {
       const result = await this.props.registerMutation({
