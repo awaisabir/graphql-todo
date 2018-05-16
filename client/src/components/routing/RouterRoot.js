@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Login from '../../containers/Login';
 import Register from '../../containers/Register';
-import Profile from '../../containers/Main';
+import Profile from '../../containers/Profile';
 
 export default ({isLoggedIn, onLogin}) => (
   <Switch>
