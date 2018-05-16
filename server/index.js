@@ -4,7 +4,6 @@ const result = dotenv.config();
 import express from 'express';
 import graphql from 'graphql';
 import bodyParser from 'body-parser';
-import passport from 'passport';
 import cors from 'cors';
 
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
