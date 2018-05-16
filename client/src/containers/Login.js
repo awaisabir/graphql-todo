@@ -34,7 +34,7 @@ class Login extends Component {
     const { username, password } = this.state;
     const { onLogin, history }   = this.props;
 
-    this.setState({loading: true});
+    this.setState({loading: true, username: '', password: ''});
 
     try {
       const result = await this.props.loginMutation({
