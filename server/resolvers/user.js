@@ -2,7 +2,32 @@ import jwt from 'jsonwebtoken';
 
 export default {
   Query: {
-      getUser: (parent, { id }, { models }) => models.User.findOne({where: { id }}),
+    getUser: (parent, { id }, { models, tokenString }) => (
+      new Promise(async (resolve, reject) => {
+        if (!tokenString)
+          reject(JSON.stringify({
+            success: false,
+            message: 'Unauthorized. Please register/login to make this request',
+          }));
+        
+          try {
+            const [prefix, token] = tokenString.split(' ');
+            jwt.verify(token, process.env.SECRET);
+
+            const user = await models.User.findOne({where: { id }});
+            resolve(user);
+          } catch (error) {
+            let message = 'No user with that matches criteria'
+            if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError')
+              message = 'Invalid token. Please login to make this request';
+
+            reject(JSON.stringify({
+              success: false,
+              message,
+            }));
+          }
+      })
+    )
   },
   //args refer to the passed in params username, password
   Mutation: {
