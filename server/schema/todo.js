@@ -1,17 +1,18 @@
 export default `
-    type Todo {
-        id: Int!
-        title: String!
-        description: [String!]!
-        completed: Boolean!
-    }
+  type Todo {
+      id: Int!
+      title: String!
+      description: [String!]!
+      completed: Boolean!
+      userId: Int!
+  }
 
-    type Query {
-        getUser(id: Int!): User!
-        allUsers: [User!]!
-    }
+  type Query {
+    getTodoById(id: Int!) : Todo
+  }
 
-    type Mutation {
-        createUser(username: String!, email: String!, password: String!): User!
-    }
+  type Mutation {
+    createTodo(title: String!, description: [String!]!, completed: Boolean!, userId: Int!) : Todo
+    deleteTodo(id: Int!) : Todo
+  }
 `;
