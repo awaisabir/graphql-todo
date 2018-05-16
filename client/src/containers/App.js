@@ -18,10 +18,12 @@ class App extends Component {
   }
 
   onLogout() {
+    localStorage.clear();
     this.setState({isLoggedIn: false, token: ''});
   }
 
   onLogin(token) {
+    localStorage.setItem('token', token);
     this.setState({token, isLoggedIn: true});
   }
 
