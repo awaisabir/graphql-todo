@@ -23,37 +23,31 @@ export default class Todos extends Component {
     });
   };
 
+  mapTodos(todos) {
+    return todos.map((todo, i) => (
+      <TableRow selected={this.isSelected(i)}>
+        <TableRowColumn>{i}</TableRowColumn>
+        <TableRowColumn>{todo.title}</TableRowColumn>
+        <TableRowColumn>This will be the description</TableRowColumn>
+      </TableRow>
+    ))
+  }
+
   render() {
+    const { todos } = this.props;
+
     return (
       <Table onRowSelection={this.handleRowSelection}>
         <TableHeader>
           <TableRow>
             <TableHeaderColumn>ID</TableHeaderColumn>
-            <TableHeaderColumn>Name</TableHeaderColumn>
-            <TableHeaderColumn>Status</TableHeaderColumn>
+            <TableHeaderColumn>Title</TableHeaderColumn>
+            <TableHeaderColumn>Description</TableHeaderColumn>
+            <TableHeaderColumn>Completed</TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow selected={this.isSelected(0)}>
-            <TableRowColumn>1</TableRowColumn>
-            <TableRowColumn>John Smith</TableRowColumn>
-            <TableRowColumn>Employed</TableRowColumn>
-          </TableRow>
-          <TableRow selected={this.isSelected(1)}>
-            <TableRowColumn>2</TableRowColumn>
-            <TableRowColumn>Randal White</TableRowColumn>
-            <TableRowColumn>Unemployed</TableRowColumn>
-          </TableRow>
-          <TableRow selected={this.isSelected(2)}>
-            <TableRowColumn>3</TableRowColumn>
-            <TableRowColumn>Stephanie Sanders</TableRowColumn>
-            <TableRowColumn>Employed</TableRowColumn>
-          </TableRow>
-          <TableRow selected={this.isSelected(3)}>
-            <TableRowColumn>4</TableRowColumn>
-            <TableRowColumn>Steve Brown</TableRowColumn>
-            <TableRowColumn>Employed</TableRowColumn>
-          </TableRow>
+          { todos ? this.mapTodos(todos) : null }
         </TableBody>
       </Table>
     );
