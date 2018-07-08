@@ -23,37 +23,37 @@ class Register extends Component {
       open: false,
     };
 
-    this._onFormSubmit        = this._onFormSubmit.bind(this);
-    this.handleClick          = this.handleClick.bind(this);
-    this.handleActionClick    = this.handleActionClick.bind(this);
+    this._onFormSubmit = this._onFormSubmit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleActionClick = this.handleActionClick.bind(this);
     this.handleChangeDuration = this.handleChangeDuration.bind(this);
-    this.handleRequestClose   = this.handleRequestClose.bind(this);
-  };
+    this.handleRequestClose = this.handleRequestClose.bind(this);
+  }
 
   async _onFormSubmit(e) {
     e.preventDefault();
     const { username, password } = this.state;
 
-    this.setState({loading: true, username: '', password: ''});
+    this.setState({ loading: true, username: '', password: '' });
 
     try {
       const result = await this.props.registerMutation({
-      variables: {
+        variables: {
           username,
           password,
-        }
+        },
       });
-      
+
       const { message, success } = result.data.register;
 
-      this.setState({loading: false, message, success}, () => {
+      this.setState({ loading: false, message, success }, () => {
         this.handleClick();
       });
     } catch (error) {
       const errorMessage = JSON.parse(error.graphQLErrors[0].message).message;
-      this.setState({loading: false, error: {message: errorMessage}}, () => { 
-        this.handleClick(); 
-      }); 
+      this.setState({ loading: false, error: { message: errorMessage } }, () => {
+        this.handleClick();
+      });
     }
   }
 
@@ -61,93 +61,101 @@ class Register extends Component {
     this.setState({
       open: true,
     });
-  };
+  }
 
   handleActionClick() {
     this.setState({
       open: false,
     });
-  };
+  }
 
   handleChangeDuration(e) {
     const value = e.target.value;
     this.setState({
       autoHideDuration: value.length > 0 ? parseInt(value) : 0,
     });
-  };
+  }
 
   handleRequestClose() {
     this.setState({
       open: false,
     });
-  };
+  }
 
   render() {
-    const { username, password, loading, error, message, success } = this.state;
+    const {
+      username, password, loading, error, message, success,
+    } = this.state;
 
     return (
-      <div style={{marginTop: '50px',}}>
-        { loading ?
-          <div style={{marginBottom: '50px', textAlign: 'center'}}>
-            <CircularProgress 
-              size={80} 
-              thickness={5} 
+      <div style={{ marginTop: '50px' }}>
+        { loading
+          ? (
+            <div style={{ marginBottom: '50px', textAlign: 'center' }}>
+              <CircularProgress
+                size={80}
+                thickness={5}
+              />
+            </div>
+          ) : null
+        }
+
+        { error.message
+          ? (
+            <Snackbar
+              open={this.state.open}
+              message={error.message}
+              autoHideDuration={this.state.autoHideDuration}
+              onActionClick={this.handleActionClick}
+              onRequestClose={this.handleRequestClose}
             />
-          </div> : null
+          ) : null
         }
 
-        { error.message ?
-          <Snackbar
-            open={this.state.open}
-            message={error.message}
-            autoHideDuration={this.state.autoHideDuration}
-            onActionClick={this.handleActionClick}
-            onRequestClose={this.handleRequestClose}
-          /> : null
+        { success
+          ? (
+            <Snackbar
+              open={this.state.open}
+              message={message}
+              autoHideDuration={this.state.autoHideDuration}
+              onActionClick={this.handleActionClick}
+              onRequestClose={this.handleRequestClose}
+            />
+          ) : null
         }
 
-        { success ? 
-          <Snackbar
-            open={this.state.open}
-            message={message}
-            autoHideDuration={this.state.autoHideDuration}
-            onActionClick={this.handleActionClick}
-            onRequestClose={this.handleRequestClose}
-          /> : null
-        }
-
-        <Card style={{textAlign: 'center'}}>
-          <CardTitle title='Register' />
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <TextField
-                type='text'
-                value={username}
-                onChange={e => this.setState({username: e.target.value, error: {}})}
-                floatingLabelText='Username'
-              />
-            </div>
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <TextField
-                type='Password'
-                value={password}
-                onChange={e => this.setState({password: e.target.value, error: {}})}
-                floatingLabelText='Password'
-              />
-            </div>
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',}}>
-              <RaisedButton 
-                style={{marginBottom: '25px', marginTop: '25px'}}
-                label='Register' 
-                primary={true} 
-                onClick={e => this._onFormSubmit(e)}
-              />
-            </div>
+        <Card style={{ textAlign: 'center' }}>
+          <CardTitle title="Register" />
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <TextField
+              type="text"
+              value={username}
+              onChange={e => this.setState({ username: e.target.value, error: {} })}
+              floatingLabelText="Username"
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <TextField
+              type="Password"
+              value={password}
+              onChange={e => this.setState({ password: e.target.value, error: {} })}
+              floatingLabelText="Password"
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <RaisedButton
+              style={{ marginBottom: '25px', marginTop: '25px' }}
+              label="Register"
+              primary
+              onClick={e => this._onFormSubmit(e)}
+            />
+          </div>
         </Card>
       </div>
     );
   }
-};
+}
 
 export default compose(
-  graphql(register, {name: 'registerMutation'})
+  graphql(register, { name: 'registerMutation' }),
 )(Register);

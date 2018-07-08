@@ -22,38 +22,38 @@ class Login extends Component {
       open: false,
     };
 
-    this._onFormSubmit        = this._onFormSubmit.bind(this);
-    this.handleClick          = this.handleClick.bind(this);
-    this.handleActionClick    = this.handleActionClick.bind(this);
+    this._onFormSubmit = this._onFormSubmit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleActionClick = this.handleActionClick.bind(this);
     this.handleChangeDuration = this.handleChangeDuration.bind(this);
-    this.handleRequestClose   = this.handleRequestClose.bind(this);
-  };
+    this.handleRequestClose = this.handleRequestClose.bind(this);
+  }
 
   async _onFormSubmit(e) {
     e.preventDefault();
     const { username, password } = this.state;
-    const { onLogin, history }   = this.props;
+    const { onLogin, history } = this.props;
 
-    this.setState({loading: true, username: '', password: ''});
+    this.setState({ loading: true, username: '', password: '' });
 
     try {
       const result = await this.props.loginMutation({
         variables: {
           username,
           password,
-        }
+        },
       });
 
       const { token } = result.data.login;
 
-      this.setState({loading: false}, () => {
+      this.setState({ loading: false }, () => {
         this.handleClick();
         onLogin(token);
         history.push('/profile');
       });
     } catch (error) {
       const errorMessage = JSON.parse(error.graphQLErrors[0].message).message;
-      this.setState({loading: false, error: {message: errorMessage}}, () => {
+      this.setState({ loading: false, error: { message: errorMessage } }, () => {
         this.handleClick();
       });
     }
@@ -63,82 +63,89 @@ class Login extends Component {
     this.setState({
       open: true,
     });
-  };
+  }
 
   handleActionClick() {
     this.setState({
       open: false,
     });
-  };
+  }
 
   handleChangeDuration(e) {
     const value = e.target.value;
     this.setState({
       autoHideDuration: value.length > 0 ? parseInt(value) : 0,
     });
-  };
+  }
 
   handleRequestClose() {
     this.setState({
       open: false,
     });
-  };
+  }
 
   render() {
-    const { username, password, loading, error, } = this.state;
+    const {
+      username, password, loading, error,
+    } = this.state;
     return (
-      <div style={{marginTop: '50px',}}>
-        { loading ?
-          <div style={{marginBottom: '50px', textAlign: 'center'}}>
-            <CircularProgress 
-              size={80} 
-              thickness={5} 
-            />
-          </div> : null
-        }
-        
-        { error.message ?
-          <Snackbar
-            open={this.state.open}
-            message={error.message}
-            autoHideDuration={this.state.autoHideDuration}
-            onActionClick={this.handleActionClick}
-            onRequestClose={this.handleRequestClose}
-          /> : null
+      <div style={{ marginTop: '50px' }}>
+        { loading
+          ? (
+            <div style={{ marginBottom: '50px', textAlign: 'center' }}>
+              <CircularProgress
+                size={80}
+                thickness={5}
+              />
+            </div>
+          ) : null
         }
 
-        <Card style={{textAlign: 'center'}}>
-          <CardTitle title='Login' />
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <TextField
-                type='text'
-                value={username}
-                onChange={e => this.setState({username: e.target.value, error: {}})}
-                floatingLabelText='Username'
+        {
+          error.message
+            ? (
+              <Snackbar
+                open={this.state.open}
+                message={error.message}
+                autoHideDuration={this.state.autoHideDuration}
+                onActionClick={this.handleActionClick}
+                onRequestClose={this.handleRequestClose}
               />
-            </div>
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <TextField
-                type='Password'
-                value={password}
-                onChange={e => this.setState({password: e.target.value, error: {}})}
-                floatingLabelText='Password'
-              />
-            </div>
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center',}}>
-              <RaisedButton 
-                style={{marginBottom: '25px', marginTop: '25px'}}
-                label='Login' 
-                primary={true} 
-                onClick={e => this._onFormSubmit(e)}
-              />
-            </div>
+            ) : null
+        }
+
+        <Card style={{ textAlign: 'center' }}>
+          <CardTitle title="Login" />
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <TextField
+              type="text"
+              value={username}
+              onChange={e => this.setState({ username: e.target.value, error: {} })}
+              floatingLabelText="Username"
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <TextField
+              type="Password"
+              value={password}
+              onChange={e => this.setState({ password: e.target.value, error: {} })}
+              floatingLabelText="Password"
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <RaisedButton
+              style={{ marginBottom: '25px', marginTop: '25px' }}
+              label="Login"
+              primary
+              onClick={e => this._onFormSubmit(e)}
+            />
+          </div>
         </Card>
       </div>
     );
   }
-};
+}
 
 export default compose(
-  graphql(login, {name: 'loginMutation'})
+  graphql(login, { name: 'loginMutation' }),
 )(Login);
