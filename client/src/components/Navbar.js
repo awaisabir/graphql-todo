@@ -1,12 +1,6 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
-const Logged = props => (
+const Logged = (props) => (
   <IconMenu
     {...props}
     iconButtonElement={(
